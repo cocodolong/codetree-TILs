@@ -38,7 +38,7 @@ int findscore(int i, int j) {
 			}
 		}
 	}
-	/*cout << "###" << r - minrow << endl;*/
+	//cout << "###" << r - minrow << endl;
 	return r - minrow;
 }
 
@@ -51,7 +51,7 @@ int main() {
 		int start, dir;
 		cin >> start >> dir;
 		//최대한 움직이기
-		int i = r;
+		int i = r+2;
 		int j = start;
 		while (1) {
 			//cout << i << " " << j << endl;
