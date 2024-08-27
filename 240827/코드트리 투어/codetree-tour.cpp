@@ -73,6 +73,7 @@ int main() {
 			for (int i = 0; i < m; i++) {
 				int from, to, cost;
 				cin >> from >> to >> cost;
+				if (from == to) continue;
 				alis[from].push_back({ to, cost });
 				alis[to].push_back({ from, cost });
 			}
