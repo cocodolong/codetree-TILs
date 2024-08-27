@@ -1,8 +1,7 @@
 #include <iostream>
 #include <queue>
-#include <algorithm>
 #include <vector>
-#include <map>
+#include <unordered_map>
 using namespace std;
 
 #define creat_land 100
@@ -20,18 +19,11 @@ struct Edge {
 };
 
 struct product {
-	int id;
 	int revenue;
-	int *cost;
-	bool operator < (product right) const {
-		int profit1 = revenue - *cost;
-		int profit2 = right.revenue - *(right.cost);
-		if (profit1 != profit2) return profit1 > profit2;
-		return id < right.id;
-	}
+	int* cost;
 };
 
-vector<product> sale_product;
+unordered_map<int, product> sale_product;
 vector<Edge> alis[10001];
 int n, m;
 int dis[2001];
@@ -49,7 +41,7 @@ void dijkstra(int start) {
 		auto now = pq.top(); pq.pop();
 		if (dis[now.num] < now.cost) continue;
 
-		for (const Edge &next : alis[now.num]) {
+		for (const Edge& next : alis[now.num]) {
 			int nextcost = dis[now.num] + next.cost;
 			if (nextcost < dis[next.num]) {
 				dis[next.num] = nextcost;
@@ -60,6 +52,10 @@ void dijkstra(int start) {
 }
 
 int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	int t;
 	cin >> t;
 
@@ -83,24 +79,31 @@ int main() {
 		else if (creat_product == index) {
 			int tempid, revenue, dest;
 			cin >> tempid >> revenue >> dest;
-			sale_product.push_back({ tempid, revenue, &dis[dest] });
+			sale_product[tempid] = { revenue, &dis[dest] };
 		}
 		// 여행 상품 취소
 		else if (cancel_product == index) {
 			int tempid;
 			cin >> tempid;
-			auto it = remove_if(sale_product.begin(), sale_product.end(), [tempid](product &p) {
-				return p.id == tempid;
-			});
-			if (it != sale_product.end()) sale_product.erase(it, sale_product.end());
+			sale_product.erase(tempid);
 		}
 		// 최적의 여행 상품 판매
 		else if (opti_sales == index) {
 			if (!sale_product.empty()) {
-				sort(sale_product.begin(), sale_product.end());
-				if (sale_product[0].revenue - *(sale_product[0].cost) >= 0) {
-					cout << sale_product[0].id << "\n";
-					sale_product.erase(sale_product.begin());
+				int max_profit = 0;
+				int best_product_id = -1;
+
+				for (const auto& p : sale_product) {
+					int profit = p.second.revenue - *(p.second.cost);
+					if (profit >= max_profit) {
+						max_profit = profit;
+						best_product_id = p.first;
+					}
+				}
+
+				if (best_product_id != -1) {
+					cout << best_product_id << "\n";
+					sale_product.erase(best_product_id);
 				}
 				else {
 					cout << -1 << "\n";
