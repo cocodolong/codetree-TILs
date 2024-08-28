@@ -112,8 +112,8 @@ void rotation(int i, int j, int k) {
 	}
 	//180도 일때,
 	else if (k == 1) { // 180도
-		for (int ii = i - 1; ii < i + 2; ii++) {
-			for (int jj = j - 1; jj < j + 2; jj++) {
+		for (int jj = j - 1; jj < j + 2; jj++) {
+			for (int ii = i - 1; ii < i + 2; ii++) {
 				if (ii >= 0 && ii < 5 && jj >= 0 && jj < 5) {
 					int new_i = i + (i - ii);
 					int new_j = j + (j - jj);
