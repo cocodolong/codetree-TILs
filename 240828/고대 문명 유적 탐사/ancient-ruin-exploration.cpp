@@ -208,7 +208,7 @@ int main() {
 		for (int jj = 0; jj < 5; jj++) {
 			for (int ii = 4; ii >= 0; ii--) {
 				if (copy_arr[ii][jj] == 0) {
-					copy_arr[ii][jj] = photo[photoindex%m]; // photoindex로 photo 배열 참조
+					copy_arr[ii][jj] = photo[photoindex]; // photoindex로 photo 배열 참조
 					photoindex++;
 				}
 			}
@@ -227,7 +227,7 @@ int main() {
 				for (int ii = 4; ii >= 0; ii--) {
 					if (copy_arr[ii][jj] == 0) {
 						flag = 1;
-						copy_arr[ii][jj] = photo[photoindex%m];
+						copy_arr[ii][jj] = photo[photoindex];
 						photoindex++;
 						max_sum++;
 					}
