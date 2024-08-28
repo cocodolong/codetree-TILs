@@ -170,8 +170,8 @@ int main() {
 		int indexk = -1;
 		int max_sum = 0;
 		for (int kk = 0; kk < 3; kk++) {
-			for (int i = 1; i < 4; i++) {
-				for (int j = 1; j < 4; j++) {
+			for (int j = 1; j < 4; j++) {
+				for (int i = 1; i < 4; i++) {	
 					arr2copy();
 					rotation(i, j, kk);
 					memset(subcheck, 0, sizeof(subcheck)); // subcheck 초기화
