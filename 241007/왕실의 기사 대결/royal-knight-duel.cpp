@@ -30,9 +30,6 @@ bool move(int target, int dir) {
 	int w = targetinfo.second.second;
 	r += dy[dir];
 	c += dx[dir];
-	if (r < 1 || c < 1 || r + h > maparr.size() || c + w > maparr[0].size()) {
-		return false; // 맵 범위를 벗어나면 이동 불가
-	}
 
 	for (int i = r; i < r + h; i++) {
 		for (int j = c; j < c + w; j++) {
@@ -89,6 +86,7 @@ int main() {
 		int target = it.first;
 		int dir = it.second;
 		order.pop();
+		if (life[target] <= 0) continue;
 		//이동
 		guard.assign(L + 2, temp);
 		for (int tempguardnum = 1; tempguardnum < N + 1; tempguardnum++) {
@@ -107,7 +105,6 @@ int main() {
 		}
 		//이동 가능여부 확인 및 이동
 		visit.assign(N + 1, 0);
-		if (life[target] <= 0) continue;
 		visit[target] = 2;
 		if (move(target, dir)) {
 			for (int tempguardnum = 1; tempguardnum < N + 1; tempguardnum++) {
