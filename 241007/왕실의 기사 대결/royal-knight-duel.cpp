@@ -106,7 +106,14 @@ int main() {
 		visit.assign(N + 1, 0);
 		visit[target] = 2;
 		if (move(target, dir)) {
-			
+			auto targetinfo = guardlist[target];
+			int target_r = targetinfo.first.first;
+			int target_c = targetinfo.first.second;
+			int target_h = targetinfo.second.first;
+			int target_w = targetinfo.second.second;
+			target_r += dy[dir];
+			target_c += dx[dir];
+			guardlist[target] = { {target_r,target_c},{target_h,target_w} };
 			for (int tempguardnum = 1; tempguardnum < N + 1; tempguardnum++) {
 				if (life[tempguardnum] <= 0) continue;
 				if (visit[tempguardnum] != 1) continue;
