@@ -30,6 +30,9 @@ bool move(int target, int dir) {
 	int w = targetinfo.second.second;
 	r += dy[dir];
 	c += dx[dir];
+	if (r < 1 || c < 1 || r + h > maparr.size() || c + w > maparr[0].size()) {
+		return false; // 맵 범위를 벗어나면 이동 불가
+	}
 
 	for (int i = r; i < r + h; i++) {
 		for (int j = c; j < c + w; j++) {
