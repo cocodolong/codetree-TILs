@@ -43,7 +43,6 @@ bool move(int target, int dir) {
 			}
 		}
 	}
-	guardlist[target] = { {r,c},{h,w} };
 	return true;
 }
 
@@ -107,6 +106,7 @@ int main() {
 		visit.assign(N + 1, 0);
 		visit[target] = 2;
 		if (move(target, dir)) {
+			
 			for (int tempguardnum = 1; tempguardnum < N + 1; tempguardnum++) {
 				if (life[tempguardnum] <= 0) continue;
 				if (visit[tempguardnum] != 1) continue;
@@ -115,6 +115,9 @@ int main() {
 				int c = tempguardinfo.first.second;
 				int h = tempguardinfo.second.first;
 				int w = tempguardinfo.second.second;
+				r += dy[dir];
+				c += dx[dir];
+				guardlist[target] = { {r,c},{h,w} };
 				life[tempguardnum] -= damege(r, c, h, w);
 			}
 		}
@@ -123,6 +126,7 @@ int main() {
 	for (int tempguardnum = 1; tempguardnum < N + 1; tempguardnum++) {
 		if (life[tempguardnum] <= 0) continue;
 		result += start_life[tempguardnum] - life[tempguardnum];
+		//cout << "#" << tempguardnum << " " << start_life[tempguardnum] << " " << life[tempguardnum] << "\n";
 	}
 	cout << result;
 }
