@@ -86,6 +86,7 @@ int main() {
 		int dir = it.second;
 		order.pop();
 		if (life[target] <= 0) continue;
+		
 		//이동
 		guard.assign(L + 2, temp);
 		for (int tempguardnum = 1; tempguardnum < N + 1; tempguardnum++) {
@@ -102,6 +103,14 @@ int main() {
 				}
 			}
 		}
+		/*for (int i = 0; i < L + 2; i++) {
+			for (int j = 0; j < L + 2; j++) {
+				cout << guard[i][j] << " ";
+			}
+			cout << "\n";
+		}
+		cout << "#####################333\n";*/
+
 		//이동 가능여부 확인 및 이동
 		visit.assign(N + 1, 0);
 		visit[target] = 2;
@@ -124,10 +133,11 @@ int main() {
 				int w = tempguardinfo.second.second;
 				r += dy[dir];
 				c += dx[dir];
-				guardlist[target] = { {r,c},{h,w} };
+				guardlist[tempguardnum] = { {r,c},{h,w} };
 				life[tempguardnum] -= damege(r, c, h, w);
 			}
 		}
+		
 	}
 	int result = 0;
 	for (int tempguardnum = 1; tempguardnum < N + 1; tempguardnum++) {
