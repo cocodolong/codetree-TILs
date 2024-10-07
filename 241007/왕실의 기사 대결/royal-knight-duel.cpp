@@ -47,16 +47,6 @@ bool move(int target, int dir) {
 	return true;
 }
 
-void resultprint() {
-	for (int i = 0; i < 6; i++) {
-		for (int j = 0; j < 6; j++) {
-			cout << guard[i][j] << " ";
-		}
-		cout << "\n";
-	}
-	cout << "##################################"<< "\n";
-}
-
 int main() {
 	int L, N, Q;
 	cin >> L >> N >> Q;
@@ -112,7 +102,6 @@ int main() {
 				}
 			}
 		}
-		//resultprint();
 		//이동 가능여부 확인 및 이동
 		visit.assign(N + 1, 0);
 		if (life[target] <= 0) continue;
