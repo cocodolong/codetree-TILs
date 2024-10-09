@@ -152,6 +152,7 @@ int main() {
 					santadirindex = tempdir;
 				}
 			}
+			if (santadirindex == -1) continue;
 			//산타 이동
 			int santa_i = i + dy[santadirindex];
 			int santa_j = j + dx[santadirindex];
@@ -191,7 +192,6 @@ int main() {
 				santa[santanum] = { santa_i, santa_j };
 			}
 		}
-
 		//추가점수
 		int flag = 0;
 		for (int tempsanta = 1; tempsanta <= p; tempsanta++) {
