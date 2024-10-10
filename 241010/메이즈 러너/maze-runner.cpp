@@ -130,7 +130,7 @@ int main() {
 		temp_j--;
 		people[temppeople] = { temp_i,temp_j };
 	}
-	cin >> end_i >> end_j;
+	//cin >> end_i >> end_j;
 	end_i--;
 	end_j--;
 	k++;
