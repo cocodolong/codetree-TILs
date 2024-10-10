@@ -26,12 +26,8 @@ void rotation(int i, int j, int k) {
 			if (maze[ii][jj] > 0) {
 				maze[ii][jj]--;
 			}
-			else {
-				maze[ii][jj] = -tempmaze[ii][jj];
-			}
 		}
 	}
-	maze[end_i][end_j] = 1000000000;
 	//돌리기
 	vector<int> temptemp(k, 0);
 	vector<vector<int>> copymaze(k, temptemp);
@@ -51,19 +47,24 @@ void rotation(int i, int j, int k) {
 
 	for (int ii = i; ii < i + k; ii++) {
 		for (int jj = j; jj < j + k; jj++) {
-			if (copy2maze[ii - i][jj - j] == 1000000000) {
-				maze[ii][jj] = 0;
-				end_i = ii;
-				end_j = jj;
-			}
-			else if (copy2maze[ii - i][jj - j] < 0) {
-				maze[ii][jj] = 0;
-				people[-copy2maze[ii - i][jj - j]] = { ii,jj };
-			}
-			else {
 				maze[ii][jj] = copy2maze[ii - i][jj - j];
-			}
 		}
+	}
+
+	//출구 90도 돌리기
+	int temp_end_i = end_i;
+	end_i = i + (end_j - j);
+	end_j = j + (i + k - 1 - temp_end_i);
+	cout << end_i << " " << end_j << "\n";
+	//사람 90도 돌리기
+	for (int temppeople = 1; temppeople <= m; temppeople++) {
+		if (pclear[temppeople] == 1) continue; //탈출 인원 제외
+		auto pre_people = people[temppeople];
+		int people_i = pre_people.first;
+		int people_j = pre_people.second;
+		if (people_i < i || people_i > i + k - 1 || people_j < j || people_j > j + k - 1) continue;
+
+		people[temppeople] = { i + (people_j  - j) , j + (i + k - 1 - people_i) };
 	}
 
 }
@@ -80,6 +81,7 @@ void findrotateed() {
 					for (int jj = j; jj < j + k; jj++) {
 						if (tempmaze[ii][jj] > 0) {
 							rotation(i, j, k);
+							//cout << "rotation " << i << " " << j << " " << k << "\n";
 							return;
 						}
 					}
@@ -88,15 +90,25 @@ void findrotateed() {
 		}
 	}
 }
-
 void printboard() {
-	for (int i = 0; i < n; i++) {
+
+	/*for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
 			cout << maze[i][j] << " ";
 		}
 		cout << "\n";
 	}
-	cout << "\n\n";
+	cout << "\n";*/
+	for (int temp = 1; temp <= m; temp++) {
+		if (pclear[temp] == 1) {
+			//cout << temp << "는 탈락\n";
+			continue;
+		}
+		auto pre_people = people[temp];
+		int temp_i = pre_people.first;
+		int temp_j = pre_people.second;
+		//cout << temp << "는 "<< temp_i << " " << temp_j<<"\n";
+	}
 }
 
 
@@ -162,8 +174,10 @@ int main() {
 			}
 		}
 		
+		//cout << 9-k <<"라운드####\n";
 		//printboard();
 		//돌리기 선정 및 돌리기
+		tempmaze.clear();
 		tempmaze.assign(n, tempvector);
 
 		for (int temp = 1; temp <= m; temp++) {
@@ -183,7 +197,7 @@ int main() {
 				break;
 			}
 		}
-		if (flag == 2) break;
+		if (flag == 1) break;
 	}
 	int result = 0;
 	for (int temp = 1; temp <= m; temp++) {
