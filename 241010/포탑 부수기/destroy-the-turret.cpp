@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 
 using namespace std;
 int n, m, k;
@@ -9,6 +10,8 @@ vector<pair<int, int>> road;
 vector<pair<int, int>> temproad;
 
 vector<vector<int>> roundhist;
+vector<vector<vector<pair<int,int>>>> visitque;
+
 
 int hist[10][10];
 
@@ -21,6 +24,44 @@ int target_j;
 
 int dy[8] = { 0,1,0,-1,1,1,-1,-1 };
 int dx[8] = { 1,0,-1,0,1,-1,-1,1 };
+
+void raser_bfs(int i, int j, int cnt) {
+	vector<pair<int,int>> temp;
+	vector<vector<pair<int, int>>> temptemp(n, temp);
+	visitque.assign(n, temptemp);
+	queue<pair<pair<int, int>, int>> q;
+	q.push({ {i, j}, 0 });
+	visit[i][j] = 0;
+
+	while (!q.empty()) {
+		int cy = q.front().first.first;
+		int cx = q.front().first.second;
+		int cnt = q.front().second;
+		q.pop();
+
+		if (raser_flag <= cnt) continue;
+		if (cy == target_i && cx == target_j) {
+			raser_flag = cnt;
+		}
+
+		for (int dir = 0; dir < 4; dir++) {
+			int ny = cy + dy[dir];
+			int nx = cx + dx[dir];
+			if (ny == n) ny = 0;
+			if (ny == -1) ny = n - 1;
+			if (nx == n) nx = 0;
+			if (nx == -1) nx = n - 1;
+
+			if (board[ny][nx] == 0) continue;
+			if (visit[ny][nx] <= cnt + 1) continue;
+
+			visit[ny][nx] = cnt + 1;
+			vector<pair<int,int>> tempque;
+			tempque.assign(visitque[cy][cx].begin(), visitque[cy][cx].end());
+			tempque.push_back({ ny, nx });
+		}
+	}
+}
 
 void raser_dfs(int i, int j, int cnt) {
 	if (raser_flag <= cnt) return;
@@ -171,12 +212,12 @@ int main() {
 		visit.assign(n, tempvector2);
 		road.clear();
 		temproad.clear();
-		raser_dfs(attacker_i, attacker_j, 0);
+		raser_bfs(attacker_i, attacker_j, 0);
 		
 		board[target_i][target_j] -= board[attacker_i][attacker_j];
-		//if (raser_flag != 1000000000) road.pop_back(); //타켓은 경로에서 없애고 별도로 처리
-		for (int i = 0; i < road.size(); i++) {
-			auto temptarget = road[i];
+		if (raser_flag != 1000000000) road.pop_back(); //타켓은 경로에서 없애고 별도로 처리
+		for (int i = 0; i < visitque[target_i][target_i].size(); i++) {
+			auto temptarget = visitque[target_i][target_i][i];
 			board[temptarget.first][temptarget.second] -= board[attacker_i][attacker_j]/2;
 			roundhist[temptarget.first][temptarget.second] = 1;
 		}
