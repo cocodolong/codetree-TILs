@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <stack>
+
 using namespace std;
 int n, m, k;
 vector<vector<int>> board;
@@ -22,22 +22,22 @@ int attacker_j;
 int target_i;
 int target_j;
 
-int dy[8] = { -1,0,1,0,1,1,-1,-1 };
-int dx[8] = { 0,-1,0,1,1,-1,-1,1 };
+int dy[8] = { 0,1,0,-1,1,1,-1,-1 };
+int dx[8] = { 1,0,-1,0,1,-1,-1,1 };
 
 void raser_bfs(int i, int j, int cnt) {
 	vector<pair<int,int>> temp;
 	vector<vector<pair<int, int>>> temptemp(n, temp);
 	visitque.assign(n, temptemp);
 
-	stack<pair<pair<int, int>, int>> q;
+	queue<pair<pair<int, int>, int>> q;
 	q.push({ {i, j}, 0 });
 	visit[i][j] = 0;
 
 	while (!q.empty()) {
-		int cy = q.top().first.first;
-		int cx = q.top().first.second;
-		int cnt = q.top().second;
+		int cy = q.front().first.first;
+		int cx = q.front().first.second;
+		int cnt = q.front().second;
 		q.pop();
 
 		if (raser_flag <= cnt) continue;
