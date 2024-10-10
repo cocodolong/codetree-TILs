@@ -29,25 +29,12 @@ void rotation(int i, int j, int k) {
 		}
 	}
 	//돌리기
-	vector<int> temptemp(k, 0);
-	vector<vector<int>> copymaze(k, temptemp);
-	vector<vector<int>> copy2maze(k, temptemp);
+	vector<vector<int>> copymaze;
+	copymaze.assign(maze.begin(), maze.end());
 
 	for (int ii = i; ii < i + k; ii++) {
 		for (int jj = j; jj < j + k; jj++) {
-			copymaze[ii - i][jj - j] = maze[ii][jj];
-		}
-	}
-
-	for (int i = 0; i < k; i++) {
-		for (int j = 0; j < k; j++) {
-			copy2maze[j][k - i - 1] = copymaze[i][j];
-		}
-	}
-
-	for (int ii = i; ii < i + k; ii++) {
-		for (int jj = j; jj < j + k; jj++) {
-				maze[ii][jj] = copy2maze[ii - i][jj - j];
+			maze[i + (jj - j)][j + (i + k - 1 - ii)] = copymaze[ii][jj];
 		}
 	}
 
@@ -55,7 +42,7 @@ void rotation(int i, int j, int k) {
 	int temp_end_i = end_i;
 	end_i = i + (end_j - j);
 	end_j = j + (i + k - 1 - temp_end_i);
-	//cout << end_i << " " << end_j << "\n";
+
 	//사람 90도 돌리기
 	for (int temppeople = 1; temppeople <= m; temppeople++) {
 		if (pclear[temppeople] == 1) continue; //탈출 인원 제외
@@ -81,7 +68,6 @@ void findrotateed() {
 					for (int jj = j; jj < j + k; jj++) {
 						if (tempmaze[ii][jj] > 0) {
 							rotation(i, j, k);
-							//cout << "rotation " << i << " " << j << " " << k << "\n";
 							return;
 						}
 					}
@@ -90,27 +76,6 @@ void findrotateed() {
 		}
 	}
 }
-void printboard() {
-
-	/*for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
-			cout << maze[i][j] << " ";
-		}
-		cout << "\n";
-	}
-	cout << "\n";*/
-	for (int temp = 1; temp <= m; temp++) {
-		if (pclear[temp] == 1) {
-			//cout << temp << "는 탈락\n";
-			continue;
-		}
-		auto pre_people = people[temp];
-		int temp_i = pre_people.first;
-		int temp_j = pre_people.second;
-		//cout << temp << "는 "<< temp_i << " " << temp_j<<"\n";
-	}
-}
-
 
 int main() {
 	cin >> n >> m >> k;
@@ -174,10 +139,7 @@ int main() {
 			}
 		}
 		
-		//cout << 9-k <<"라운드####\n";
-		//printboard();
 		//돌리기 선정 및 돌리기
-		tempmaze.clear();
 		tempmaze.assign(n, tempvector);
 
 		for (int temp = 1; temp <= m; temp++) {
