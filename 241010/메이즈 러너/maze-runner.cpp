@@ -55,7 +55,7 @@ void rotation(int i, int j, int k) {
 	int temp_end_i = end_i;
 	end_i = i + (end_j - j);
 	end_j = j + (i + k - 1 - temp_end_i);
-	cout << end_i << " " << end_j << "\n";
+	//cout << end_i << " " << end_j << "\n";
 	//사람 90도 돌리기
 	for (int temppeople = 1; temppeople <= m; temppeople++) {
 		if (pclear[temppeople] == 1) continue; //탈출 인원 제외
@@ -130,7 +130,7 @@ int main() {
 		temp_j--;
 		people[temppeople] = { temp_i,temp_j };
 	}
-	//cin >> end_i >> end_j;
+	cin >> end_i >> end_j;
 	end_i--;
 	end_j--;
 	k++;
