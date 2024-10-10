@@ -174,7 +174,7 @@ int main() {
 		raser_dfs(attacker_i, attacker_j, 0);
 		
 		board[target_i][target_j] -= board[attacker_i][attacker_j];
-		if (raser_flag != 1000000000) road.pop_back(); //타켓은 경로에서 없애고 별도로 처리
+		//if (raser_flag != 1000000000) road.pop_back(); //타켓은 경로에서 없애고 별도로 처리
 		for (int i = 0; i < road.size(); i++) {
 			auto temptarget = road[i];
 			board[temptarget.first][temptarget.second] -= board[attacker_i][attacker_j]/2;
@@ -200,7 +200,6 @@ int main() {
 		}
 
 		//printboard();
-
 		if (endflag < 2) break;
 	}
 
