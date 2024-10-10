@@ -66,31 +66,6 @@ void raser_bfs(int i, int j, int cnt) {
 	}
 }
 
-void raser_dfs(int i, int j, int cnt) {
-	if (raser_flag <= cnt) return;
-	if (i == target_i && j == target_j) {
-		raser_flag = cnt;
-		road.assign(temproad.begin(), temproad.end());
-	}
-	else {
-		for (int dir = 0; dir < 4; dir++) {
-			int ny = i + dy[dir];
-			int nx = j + dx[dir];
-			if (ny == n) ny = 0;
-			if (ny == -1) ny = n - 1;
-			if (nx == n) nx = 0;
-			if (nx == -1) nx = n - 1;
-
-			if (board[ny][nx] == 0) continue;
-			if (visit[ny][nx] <= cnt + 1) continue;
-			visit[ny][nx] = cnt + 1;
-			temproad.push_back({ny,nx});
-			raser_dfs(ny, nx, cnt+1);
-			temproad.pop_back();
-		}
-	}
-}
-
 void booming() {
 
 	//board[target_i][target_j] -= board[attacker_i][attacker_j]; //main문에서 처리
@@ -221,7 +196,8 @@ int main() {
 		if (raser_flag != 1000000000)  road.pop_back(); //타켓은 경로에서 없애고 별도로 처리
 		for (int i = 0; i < road.size(); i++) {
 			auto temptarget = road[i];
-			board[temptarget.first][temptarget.second] -= board[attacker_i][attacker_j]/2;
+			if (board[temptarget.first][temptarget.second] -= board[attacker_i][attacker_j] / 2 < 0) board[temptarget.first][temptarget.second] = 0;
+			else board[temptarget.first][temptarget.second] -= board[attacker_i][attacker_j]/2;
 			roundhist[temptarget.first][temptarget.second] = 1;
 		}
 		
