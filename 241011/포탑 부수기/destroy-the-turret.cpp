@@ -135,8 +135,7 @@ int main() {
 			}
 		}
 		hist[attacker_i][attacker_j] = round;
-		//공격자 강화
-		board[attacker_i][attacker_j] += n + m;
+		
 		//cout << "공격자: " << attacker_i << " " << attacker_j << "\n";
 
 		//대상 선정
@@ -172,7 +171,9 @@ int main() {
 			}
 		}
 
-		//cout << "타겟: " << target_i << " " << target_j << "\n";
+		cout << "타겟: " << target_i << " " << target_j << "\n";
+		//공격자 강화
+		board[attacker_i][attacker_j] += n + m;
 
 		//레이저 공격
 		raser_flag = 0;
