@@ -214,15 +214,15 @@ int main() {
 			booming();
 		}
 
-		//printboard();
-		/*cout << "##his\n";
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-				cout << hist[i][j] << " ";
-			}
-			cout << "\n";
-		}
-		cout << "\n";*/
+		
+		// cout << "##his\n";
+		// for (int i = 0; i < n; i++) {
+		// 	for (int j = 0; j < m; j++) {
+		// 		cout << hist[i][j] << " ";
+		// 	}
+		// 	cout << "\n";
+		// }
+		// cout << "\n";
 
 		//미참여자 추가점수
 		roundhist[attacker_i][attacker_j] = 1;
@@ -234,14 +234,41 @@ int main() {
 				if (board[i][j] > 0) endflag++;
 			}
 		}
+		//printboard();
 		if (endflag < 2) break;
 	}
 
-	int result = 0;
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m; j++) {
-			if (result < board[i][j]) result = board[i][j];
+	int max_target = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				int de = -1;
+				if (board[i][j] > max_target) {
+					target_i = i;
+					target_j = j;
+					max_target = board[i][j];
+				}
+				else if (board[i][j] == max_target) {
+					if (hist[i][j] < hist[target_i][target_j]) {
+						target_i = i;
+						target_j = j;
+						max_target = board[i][j];
+					}
+					else if (hist[i][j] == hist[target_i][target_j]) {
+						if (i + j < target_i + target_j) {
+							target_i = i;
+							target_j = j;
+							max_target = board[i][j];
+						}
+						else if (i + j == target_i + target_j) {
+							if (j < attacker_j) {
+								target_i = i;
+								target_j = j;
+								max_target = board[i][j];
+							}
+						}
+					}
+				}
+			}
 		}
-	}
-	cout << result;
+	cout << board[target_i][target_j];
 }
