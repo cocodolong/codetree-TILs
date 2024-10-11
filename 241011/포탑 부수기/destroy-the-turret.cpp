@@ -44,8 +44,8 @@ void raser_bfs(int i, int j, int cnt) {
 			int nx = cx + dx[dir];
 			if (ny == n) ny = 0;
 			if (ny == -1) ny = n - 1;
-			if (nx == n) nx = 0;
-			if (nx == -1) nx = n - 1;
+			if (nx == m) nx = 0;
+			if (nx == -1) nx = m - 1;
 			if (board[ny][nx] == 0) continue;
 			if (visit[ny][nx] <= cnt + 1) continue;
 
@@ -65,8 +65,8 @@ void booming() {
 		int nx = target_j + dx[dir];
 		if (ny == n) ny = 0;
 		if (ny == -1) ny = n - 1;
-		if (nx == n) nx = 0;
-		if (nx == -1) nx = n - 1;
+		if (nx == m) nx = 0;
+		if (nx == -1) nx = m - 1;
 		if (board[ny][nx] == 0) continue;
 		if (ny == attacker_i && nx == attacker_j) continue;
 		if (board[ny][nx] - (board[attacker_i][attacker_j] / 2) < 0) board[ny][nx] = 0;
@@ -77,7 +77,7 @@ void booming() {
 
 void printboard() {
 	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
+		for (int j = 0; j < m; j++) {
 			cout << board[i][j] << " ";
 		}
 		cout << "\n";
@@ -87,10 +87,10 @@ void printboard() {
 
 int main() {
 	cin >> n >> m >> k;
-	vector<int> tempvector(n, 0);
+	vector<int> tempvector(m, 0);
 	board.assign(n, tempvector);
 	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
+		for (int j = 0; j < m; j++) {
 			cin >> board[i][j];
 		}
 	}
@@ -104,7 +104,7 @@ int main() {
 
 		int min_atk = 1000000000;
 		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
+			for (int j = 0; j < m; j++) {
 				if (board[i][j] == 0)continue;
 				if (board[i][j] < min_atk) {
 					attacker_i = i;
@@ -139,7 +139,7 @@ int main() {
 		//대상 선정
 		int max_target = 0;
 		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
+			for (int j = 0; j < m; j++) {
 				int de = -1;
 				if (board[i][j] > max_target) {
 					target_i = i;
@@ -177,9 +177,9 @@ int main() {
 
 		//레이저 공격
 		raser_flag = 0;
-		vector<int> tempvector2(n, 1000000000);
+		vector<int> tempvector2(m, 1000000000);
 		visit.assign(n, tempvector2);
-		vector<pair<int, int>> temppair(n, { -1,-1 });
+		vector<pair<int, int>> temppair(m, { -1,-1 });
 		road.assign(n, temppair);
 		raser_bfs(attacker_i, attacker_j, 0);
 
@@ -217,7 +217,7 @@ int main() {
 		//printboard();
 		/*cout << "##his\n";
 		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
+			for (int j = 0; j < m; j++) {
 				cout << hist[i][j] << " ";
 			}
 			cout << "\n";
@@ -229,7 +229,7 @@ int main() {
 		roundhist[target_i][target_j] = 1;
 		int endflag = 0;
 		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
+			for (int j = 0; j < m; j++) {
 				if (roundhist[i][j] == 0 && board[i][j] != 0) board[i][j]++;
 				if (board[i][j] > 0) endflag++;
 			}
@@ -239,7 +239,7 @@ int main() {
 
 	int result = 0;
 	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
+		for (int j = 0; j < m; j++) {
 			if (result < board[i][j]) result = board[i][j];
 		}
 	}
