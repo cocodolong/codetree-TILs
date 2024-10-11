@@ -23,8 +23,8 @@ int dy[8] = { 0,1,0,-1,1,1,-1,-1 };
 int dx[8] = { 1,0,-1,0,1,-1,-1,1 };
 
 void raser_bfs(int i, int j, int cnt) {
-	
-	queue<pair<pair<int, int>,int>> q;
+
+	queue<pair<pair<int, int>, int>> q;
 	q.push({ {i,j},cnt });
 
 	while (!q.empty()) {
@@ -68,7 +68,7 @@ void booming() {
 		if (nx == n) nx = 0;
 		if (nx == -1) nx = n - 1;
 		if (board[ny][nx] == 0) continue;
-
+		if (ny == attacker_i && nx == attacker_j) continue;
 		if (board[ny][nx] - (board[attacker_i][attacker_j] / 2) < 0) board[ny][nx] = 0;
 		else board[ny][nx] -= (board[attacker_i][attacker_j] / 2);
 		roundhist[ny][nx] = 1;
@@ -134,32 +134,31 @@ int main() {
 				}
 			}
 		}
-		hist[attacker_i][attacker_j] = round;
-		
 		//cout << "공격자: " << attacker_i << " " << attacker_j << "\n";
 
 		//대상 선정
 		int max_target = 0;
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
+				int de = -1;
 				if (board[i][j] > max_target) {
 					target_i = i;
 					target_j = j;
 					max_target = board[i][j];
 				}
 				else if (board[i][j] == max_target) {
-					if (hist[i][j] < hist[attacker_i][attacker_j]) {
+					if (hist[i][j] < hist[target_i][target_j]) {
 						target_i = i;
 						target_j = j;
 						max_target = board[i][j];
 					}
-					else if (hist[i][j] == hist[attacker_i][attacker_j]) {
-						if (i + j < attacker_i + attacker_j) {
+					else if (hist[i][j] == hist[target_i][target_j]) {
+						if (i + j < target_i + target_j) {
 							target_i = i;
 							target_j = j;
 							max_target = board[i][j];
 						}
-						else if (i + j == attacker_i + attacker_j) {
+						else if (i + j == target_i + target_j) {
 							if (j < attacker_j) {
 								target_i = i;
 								target_j = j;
@@ -174,6 +173,7 @@ int main() {
 		//cout << "타겟: " << target_i << " " << target_j << "\n";
 		//공격자 강화
 		board[attacker_i][attacker_j] += n + m;
+		hist[attacker_i][attacker_j] = round;
 
 		//레이저 공격
 		raser_flag = 0;
@@ -183,13 +183,24 @@ int main() {
 		road.assign(n, temppair);
 		raser_bfs(attacker_i, attacker_j, 0);
 
-		board[target_i][target_j] -= board[attacker_i][attacker_j];
+		if (board[target_i][target_j] - board[attacker_i][attacker_j] < 0) {
+			board[target_i][target_j] = 0;
+		}
+		else {
+			board[target_i][target_j] -= board[attacker_i][attacker_j];
+		}
+
 
 		if (raser_flag == 1) {
 			int cy = road[target_i][target_j].first;
 			int cx = road[target_i][target_j].second;
 			while (!(cy == attacker_i && cx == attacker_j)) {
-				board[cy][cx] -= board[attacker_i][attacker_j] / 2;
+				if (board[cy][cx] - (board[attacker_i][attacker_j] / 2) < 0) {
+					board[cy][cx] = 0;
+				}
+				else {
+					board[cy][cx] -= (board[attacker_i][attacker_j] / 2);
+				}
 				roundhist[cy][cx] = 1;
 
 				auto next_loc = road[cy][cx];
@@ -198,12 +209,21 @@ int main() {
 			}
 		}
 		//레이저 공격이 안될 때
-		else  {
+		else {
 			//포격
 			booming();
 		}
 
 		//printboard();
+		/*cout << "##his\n";
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				cout << hist[i][j] << " ";
+			}
+			cout << "\n";
+		}
+		cout << "\n";*/
+
 		//미참여자 추가점수
 		roundhist[attacker_i][attacker_j] = 1;
 		roundhist[target_i][target_j] = 1;
@@ -214,7 +234,6 @@ int main() {
 				if (board[i][j] > 0) endflag++;
 			}
 		}
-		//printboard();
 		if (endflag < 2) break;
 	}
 
